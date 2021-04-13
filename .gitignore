@@ -19,3 +19,4 @@ Engines/*
 # Ignore text files, except README.txt
 *.txt
 !README.md
+*.xml
