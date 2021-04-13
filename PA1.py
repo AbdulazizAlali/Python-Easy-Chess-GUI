@@ -743,7 +743,7 @@ Please note that there may be more than one
 solutions, this function prints one of the  
 feasible solutions."""
 
-def isAttacked(vector):
+def is_attacked (vector):
     length = len(vector)
     for i in range(0, length):
         if vector[i] == 0:
@@ -756,6 +756,13 @@ def isAttacked(vector):
     return False;
 
 
+def is_partial(vector):
+    length = len(vector)
+    for i in range(0, length):
+        if vector[i] == 0:
+            return True
+    return False
+
 
 def backtracking():
     vector = [0, 0, 0, 0, 0, 0, 0, 0]
@@ -763,25 +770,21 @@ def backtracking():
     while k >= 0:
         while vector[k] <= 7:
             vector[k] = vector[k]+1
-            if isAttacked(vector) == False:
+            if is_attacked(vector) == False and is_partial(vector) == False:
                 print("done")
                 print(vector)
-                for i in range(0 , len(vector)):
+                for i in range(0, len(vector)):
                     vector[i] -= 1
                 print(vector)
                 return vector
-            elif vector[7] == 0:
+            elif is_partial(vector):
                 k += 1
         vector[k] = 0
         k -= 1
 
 
 
-# def isfille(vector):
-#     length = len(vector)
-#     for i in range(0, length):
-#         if vector[i] == 0:
-#             return True;
+
 #
 # def mrv():
 
@@ -793,7 +796,7 @@ def backtracking(mrv = False, lcv =False, fc =False, arc =False):
     while k >= 0:
         while vector[k] <= 7:
             vector[k] = vector[k]+1
-            if isAttacked(vector) == False:
+            if is_attacked(vector) == False:
                 print("done")
                 print(vector)
                 for i in range(0 , len(vector)):
