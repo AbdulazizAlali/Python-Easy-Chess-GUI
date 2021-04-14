@@ -743,18 +743,17 @@ Please note that there may be more than one
 solutions, this function prints one of the  
 feasible solutions."""
 
-def is_attacked (vector):
+def is_solution (vector):
     length = len(vector)
     for i in range(0, length):
-        if vector[i] == 0:
-            return True;
+        if is_partial(vector):
+            return False
         for j in range(i+1, length):
-            if (vector[i] == vector[j]):
-                return True
-            if(vector[i]-vector[j]== i-j or vector[i]-vector[j]==j-i):
-                return True
-    return False;
-
+            if vector[i] == vector[j]:
+                return False
+            if vector[i]-vector[j]== i-j or vector[i]-vector[j]==j-i:
+                return False
+    return True
 
 def is_partial(vector):
     length = len(vector)
@@ -763,6 +762,62 @@ def is_partial(vector):
             return True
     return False
 
+def is_p_and_L(vector):
+    if is_partial(vector):
+        length = len(vector)
+        for i in range(0, length):
+            for j in range(i + 1, length):
+                if vector[i] !=0 and vector[j]!=0:
+                    if vector[i] == vector[j]:
+                        return False
+                    if vector[i] - vector[j] == i - j or vector[i] - vector[j] == j - i:
+                        return False
+        return True
+    return False
+
+
+
+def is_legal(x, vector):
+    length = len(vector)
+    for i in range(0, length):
+        # print("isL i ",i)
+        if x != i and vector[i] != 0:
+            # print("isL i ", i)
+            if vector[i] == vector[x]:
+
+                return False
+            elif vector[i] - vector[x] == (i - x) or vector[i] - vector[x] == (x - i):
+                return False
+
+    return True
+
+
+
+
+def mrv(vector):
+    length = len(vector)
+    myk = 10
+    min = 10
+
+    for i in range(0, length):
+        temp = 0
+        if vector[i] == 0:
+            # print("i is", i)
+            for j in range(1, length+1):
+                vector[i] = j
+                if is_legal(i, vector):
+                    temp = temp + 1
+                    # print("temp", temp)
+            vector[i] = 0
+
+            if min > temp:
+                min = temp
+                myk = i
+                # print("k is", myk, "\n")
+
+    # print(vector)
+    return myk
+
 
 def backtracking():
     vector = [0, 0, 0, 0, 0, 0, 0, 0]
@@ -770,45 +825,50 @@ def backtracking():
     while k >= 0:
         while vector[k] <= 7:
             vector[k] = vector[k]+1
-            if is_attacked(vector) == False and is_partial(vector) == False:
+            if is_solution(vector):
                 print("done")
                 print(vector)
                 for i in range(0, len(vector)):
                     vector[i] -= 1
                 print(vector)
                 return vector
-            elif is_partial(vector):
+            elif is_p_and_L(vector):
                 k += 1
         vector[k] = 0
         k -= 1
 
 
-
-
-#
-# def mrv():
-
-
-
-def backtracking(mrv = False, lcv =False, fc =False, arc =False):
+def backtraking_with_mrv (MRV):
     vector = [0, 0, 0, 0, 0, 0, 0, 0]
+    stack = []
     k = 0
+    if MRV:
+        stack.append(k)
     while k >= 0:
+        print('k with mrv', k ,vector)
         while vector[k] <= 7:
             vector[k] = vector[k]+1
-            if is_attacked(vector) == False:
-                print("done")
+            if is_solution(vector):
                 print(vector)
-                for i in range(0 , len(vector)):
+                for i in range(0, len(vector)):
                     vector[i] -= 1
                 print(vector)
                 return vector
-            elif vector[7] == 0:
-                k += 1
+            elif is_p_and_L(vector):
+                if MRV:
+                    k = mrv(vector)
+                    stack.append(k)
+                else:
+                    k += 1
         vector[k] = 0
-        k -= 1
 
-
+        if MRV:
+            if stack:
+                k = stack.pop()
+            else:
+                break
+        else:
+            k -= 1
 
 
 
@@ -823,6 +883,7 @@ def main():
     pecg = EasyChessGui(theme)
 
     pecg.main_loop()
+
 
 
 if __name__ == "__main__":
