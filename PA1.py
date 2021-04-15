@@ -792,6 +792,32 @@ def is_legal(x, vector):
     return True
 
 
+def lcv(x, vector, stack):
+    length = len(vector)
+    myValue = 0
+    lest = 0
+
+    for i in range(1, length+1):
+        temp = 0
+        vector[x] = i
+        if is_legal(x, vector) and i not in stack:
+            for j in range(0, length):
+                if x != j and vector[j] == 0:
+                    for k in range(1, length+1):
+                        vector[j] = k
+                        if is_legal(j, vector):
+                            temp = temp + 1
+                    vector[j] = 0
+            if temp > lest:
+                lest = temp
+                myValue = i
+    vector[x] = 0
+    if myValue not in stack:
+        return myValue
+    else:
+        return 0
+
+
 
 
 def mrv(vector):
@@ -820,11 +846,22 @@ def mrv(vector):
 
 
 def backtracking():
+    noSolution = False;
     vector = [0, 0, 0, 0, 0, 0, 0, 0]
     k = 0
-    while k >= 0:
+    while k >= 0 and noSolution == False:
         while vector[k] <= 7:
-            vector[k] = vector[k]+1
+            if True:
+                print("k", k)
+                temp = lcv(k, vector)
+                if temp != 0:
+                    vector[k] = temp
+                else:
+                    noSolution= True
+                    break
+                print(vector)
+            else:
+                vector[k] = vector[k]+1
             if is_solution(vector):
                 print("done")
                 print(vector)
@@ -836,18 +873,47 @@ def backtracking():
                 k += 1
         vector[k] = 0
         k -= 1
+    if noSolution:
+        return [0,0]
 
 
-def backtraking_with_mrv (MRV):
+
+def backtraking_with_mrv (MRV,LCV):
     vector = [0, 0, 0, 0, 0, 0, 0, 0]
-    stack = []
+    noSolution = False;
+    MRV_stack = []
     k = 0
-    if MRV:
-        stack.append(k)
-    while k >= 0:
-        print('k with mrv', k ,vector)
-        while vector[k] <= 7:
-            vector[k] = vector[k]+1
+    # if MRV:
+    #     MRV_stack.append(k)
+    LCV_stack = [[],[],[], [],[],[],[],[]]
+
+    while k >= 0 and noSolution == False:
+
+        while vector[k] <= 8:
+            print("new Itteration", vector)
+            print("mvr stack", MRV_stack)
+            print("k ", k)
+            print("LCV stack", LCV_stack)
+            if LCV:
+                # print("k", k)
+                temp = lcv(k, vector, LCV_stack[k])
+                if temp != 0:
+                    vector[k] = temp
+                    LCV_stack[k].append(temp)
+                    MRV_stack.append(k)
+                else:
+                    # if MRV_stack:
+                    #     print(k)
+                    #     print(MRV_stack)
+                    print("no modify ", vector)
+                    vector[k] = 0
+                    LCV_stack[k] = []
+
+                    break
+                # print(vector)
+            else:
+                vector[k] = vector[k] + 1
+            print("after modify", vector, "\n")
             if is_solution(vector):
                 print(vector)
                 for i in range(0, len(vector)):
@@ -857,19 +923,20 @@ def backtraking_with_mrv (MRV):
             elif is_p_and_L(vector):
                 if MRV:
                     k = mrv(vector)
-                    stack.append(k)
                 else:
                     k += 1
         vector[k] = 0
 
         if MRV:
-            if stack:
-                k = stack.pop()
+            if MRV_stack:
+                k = MRV_stack.pop()
+                print("backtracking k= ", k, "\n")
             else:
                 break
         else:
             k -= 1
-
+    if noSolution:
+        return "no Solution"
 
 
 
@@ -879,7 +946,10 @@ def backtraking_with_mrv (MRV):
 
 def main():
     theme = 'Reddit'
-
+    # print(backtracking())
+    print(mrv([1,4,7,3,0,0,0,0]))
+    # print(backtraking_with_mrv(True, True))
+    # print(lcv(3,[1,4,7,0,0,0,0,0],[3,5]))
     pecg = EasyChessGui(theme)
 
     pecg.main_loop()

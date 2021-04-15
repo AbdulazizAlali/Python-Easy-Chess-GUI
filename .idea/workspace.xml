@@ -2,8 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b79774f7-3fa7-4c39-a53e-d502f9b220f2" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/Python-Easy-Chess-GUI.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Python-Easy-Chess-GUI.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PA1.py" beforeDir="false" afterPath="$PROJECT_DIR$/PA1.py" afterDir="false" />
     </list>
